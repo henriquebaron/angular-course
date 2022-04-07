@@ -10,14 +10,20 @@ import { Component, OnInit } from '@angular/core';
   // directly on the TypeScript file.
   // The backtick string is a JavaScript feature that allows the input of 
   // multiline strings.
-  template: `
-  <app-server></app-server>
-  <app-server></app-server>`,
+  // template: `
+  // <app-server></app-server>
+  // <app-server></app-server>`,
+  templateUrl: './servers.component.html',
   styleUrls: ['./servers.component.css']
 })
 export class ServersComponent implements OnInit {
+  allowNewServer: boolean = false;
 
-  constructor() { }
+  constructor() { 
+    setTimeout(() => {
+      this.allowNewServer = true;
+    },2000);
+  }
 
   ngOnInit(): void {
   }
