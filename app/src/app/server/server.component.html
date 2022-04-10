@@ -1,3 +1,6 @@
 <!-- The double curly braces indicate simply string interpolation: any (single line)
 expression which resolves to a string. -->
-<p [ngStyle]="{backgroundColor: getColor()}">Server with ID {{ serverId }} is {{ getServerStatus() }} </p>
+<!-- The ngClass directive allows to attach a CSS class to an element dinamically. In the example below,
+the "online" class is added to the element if the condition is satisfied. -->
+<p [ngStyle]="{backgroundColor: getColor()}"
+[ngClass]="{online: serverStatus === 'online'}">Server with ID {{ serverId }} is {{ getServerStatus() }} </p>
