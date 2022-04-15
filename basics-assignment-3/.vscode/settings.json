@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/71aa82fe-53be-4d37-9111-5041225e7c6d/resourceGroups/SimuladorLucroResources/providers/Microsoft.Web/sites/simuladorlucro",
+    "appService.deploySubpath": "./dist/angular13"
+}
