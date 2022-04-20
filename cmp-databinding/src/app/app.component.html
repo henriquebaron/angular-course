@@ -12,7 +12,7 @@
         the opening and closing tags of the component.
         By default the content in this position is not displpayed, UNLESS the directive <ng-content> is used
         in the referenced component. See server-element-component.html for more details. -->
-        <p>
+        <p #contentParagraph>
           <strong *ngIf="serverElement.type === 'server'" style="color: red">{{ serverElement.content }}</strong>
           <em *ngIf="serverElement.type === 'blueprint'">{{ serverElement.content }}</em>
         </p>

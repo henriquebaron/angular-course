@@ -4,6 +4,7 @@ import {
   AfterViewChecked,
   AfterViewInit,
   Component,
+  ContentChild,
   DoCheck,
   ElementRef,
   Input,
@@ -47,7 +48,10 @@ export class ServerElementComponent implements OnInit,
   @Input() name: string;
   /* The reference to the HTML tag here was created to show the content of the HTML elements at 
   each point in time. See the console logs on ngOnInit and ngAfterViewInit, for example. */
-  @ViewChild('heading', {static: true}) header: ElementRef;
+  @ViewChild('heading', { static: true }) header: ElementRef;
+  /* The @ContentChild works just like @ViewChild, but is used to access elements on the content
+  of the component (where the directive <ng-content> is placed) */
+  @ContentChild('contentParagraph', { static: true }) paragraph: ElementRef;
 
   constructor() {
     console.log('Constructor called');
@@ -55,7 +59,9 @@ export class ServerElementComponent implements OnInit,
 
   ngOnInit(): void {
     console.log('ngOnInit called');
+    // The content of both elements here is still empty.
     console.log('Text content: ' + this.header.nativeElement.textContent);
+    console.log('Test content of paragraph: ' + this.paragraph.nativeElement.textContent);
   }
 
   ngDoCheck(): void {
@@ -69,14 +75,17 @@ export class ServerElementComponent implements OnInit,
 
   ngAfterContentInit(): void {
     console.log('ngAfterContentInitCalled');
+    // The content of the paragraph now has something, after the content has been initialized
+    console.log('Test content of paragraph: ' + this.paragraph.nativeElement.textContent);
   }
-  
+
   ngAfterContentChecked(): void {
     console.log('ngAfterContentCheckedCalled');
   }
 
   ngAfterViewInit(): void {
     console.log('ngAfterViewInitCalled');
+    // The content of hte element now has something, after the view has been initialized
     console.log('Text content: ' + this.header.nativeElement.textContent);
   }
 
