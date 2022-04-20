@@ -1,0 +1,12 @@
+/* Before adding the content below, blueprint elements were not colored blue, even though the same style has
+already been applied in the parent component (AppComponent). This is not the defaul CSS behavior, which would apply
+the style to all template files.
+So why this happens?
+This is enforced by Angular, and called view encapsulation. The compiler adds a common attribute to all HTML
+elements inside one component, adding this attribute also to the corresponding component CSS file. This ensures
+that the style created in a component.css file is only applied to that component.
+(This is a feature similar to what could be done by "Shadow DOM", a technology which is not supported on every
+browser) */
+p {
+  color: blue;
+}
