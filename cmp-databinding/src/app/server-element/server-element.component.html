@@ -1,9 +1,9 @@
 <div class="panel panel-default">
 	<div class="panel-heading">{{ element.name }}</div>
 	<div class="panel-body">
-		<p>
-			<strong *ngIf="element.type === 'server'" style="color: red">{{ element.content }}</strong>
-			<em *ngIf="element.type === 'blueprint'">{{ element.content }}</em>
-		</p>
+		<!-- The ng-content directive enables the content that is inserted between the component opening
+		and closing tags to be displayed. The position of this directive dictates also where this content
+		will be placed within this component. -->
+		<ng-content></ng-content>
 	</div>
 </div>

@@ -1,10 +1,18 @@
 <div class="container">
-  <app-cockpit (serverCreated)="onServerAdded($event)"
-  (bpCreated)="onBlueprintAdded($event)"></app-cockpit>
+  <app-cockpit (serverCreated)="onServerAdded($event)" (bpCreated)="onBlueprintAdded($event)"></app-cockpit>
   <hr>
   <div class="row">
     <div class="col-xs-12">
-      <app-server-element *ngFor="let serverElement of serverElements" [srvElement]="serverElement"></app-server-element>
+      <app-server-element *ngFor="let serverElement of serverElements" [srvElement]="serverElement">
+        <!-- The paragraph below has been removed from the ServerElementComponent HTML and inserted between
+        the opening and closing tags of the component.
+        By default the content in this position is not displpayed, UNLESS the directive <ng-content> is used
+        in the referenced component. See server-element-component.html for more details. -->
+        <p>
+          <strong *ngIf="serverElement.type === 'server'" style="color: red">{{ serverElement.content }}</strong>
+          <em *ngIf="serverElement.type === 'blueprint'">{{ serverElement.content }}</em>
+        </p>
+      </app-server-element>
     </div>
   </div>
 </div>
