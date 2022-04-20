@@ -7,7 +7,8 @@
     anywhere else *inside the HTML document*. -->
     <input type="text" class="form-control" #serverNameInput>
     <label>Server Content</label>
-    <input type="text" class="form-control" [(ngModel)]="newServerContent">
+    <!-- <input type="text" class="form-control" [(ngModel)]="newServerContent"> -->
+    <input type="text" class="form-control" #serverContentInput>
     <br>
     <!-- The tag created above is used as an argument to the method. Note that the tag passes the whole
     HTML object, and not only the value input on the field. See the TS code of hte method for more details. -->
