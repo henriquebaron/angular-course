@@ -6,4 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  numbers: number[] = [];
+
+  onIntervalElapsed(secondsCount: number): void {
+    this.numbers.push(secondsCount);
+  }
 }
