@@ -3,7 +3,11 @@
   <hr>
   <div class="row">
     <div class="col-xs-12">
-      <app-server-element *ngFor="let serverElement of serverElements" [srvElement]="serverElement">
+      <button class="btn btn-primary" (click)="onChangeFirst()">Change first Element</button>
+      <button class="btn btn-danger" (click)="onDestroyFirst()">Destroy first Element</button>
+      <app-server-element *ngFor="let serverElement of serverElements" 
+      [srvElement]="serverElement"
+      [name]="serverElement.name">
         <!-- The paragraph below has been removed from the ServerElementComponent HTML and inserted between
         the opening and closing tags of the component.
         By default the content in this position is not displpayed, UNLESS the directive <ng-content> is used
