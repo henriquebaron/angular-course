@@ -27,7 +27,10 @@
       be called directly in square brackets, "passing to the directive itself" the value of the property.
       The behavior of other properties remain unchanged. Angular will figure out wether the bound property
       belongs to the element or to the directive. -->
-      <p [appBetterHighlight]="'red'" [defaultColor]="'yellow'">Style me with better directive</p>
+      <!-- The properties of directives can be called without square brackets. For that, the single quotes must
+      also be removed from the value (for string values). In this case, the name of the property must be clear on
+      differentiating it from regular HTML element attributes, to avoid confusion.-->
+      <p [appBetterHighlight]="'red'" defaultColor="yellow">Style me with better directive</p>
     </div>
   </div>
 </div>
