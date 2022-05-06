@@ -23,7 +23,11 @@
         <p>Only odd</p>
       </ng-template>
       <p appBasicHighlight>Style me with basic directive</p>
-      <p appBetterHighlight [defaultColor]="'yellow'" [highlightColor]="'red'">Style me with better directive</p>
+      <!-- Giving a directive a property with the same name as the directive itself enables the directive to
+      be called directly in square brackets, "passing to the directive itself" the value of the property.
+      The behavior of other properties remain unchanged. Angular will figure out wether the bound property
+      belongs to the element or to the directive. -->
+      <p [appBetterHighlight]="'red'" [defaultColor]="'yellow'">Style me with better directive</p>
     </div>
   </div>
 </div>

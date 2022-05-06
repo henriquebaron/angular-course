@@ -6,7 +6,9 @@ import { defaultCoreCipherList } from 'constants';
 })
 export class BetterHighlightDirective implements OnInit {
   @Input() defaultColor: string = 'transparent';
-  @Input() highlightColor: string = 'blue';
+  /* It is possible to give a property a name (or alias, like in the example) equal to the name of the directive.
+  This will "simplify" the way of calling the directive. See the HTML code. */
+  @Input('appBetterHighlight') highlightColor: string = 'blue';
   // The HostBinding decorator binds to a property of the element using the directive.
   @HostBinding('style.backgroundColor') backgroundColor: string;
 
