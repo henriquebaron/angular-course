@@ -10,7 +10,9 @@ instance of the AccountsService between the AppComponent and its child component
   templateUrl: './new-account.component.html',
   styleUrls: ['./new-account.component.css'],
   // To use a service properly, it must be added tot he providers of the component
-  providers: [LoggingService]
+  // The service was commented out from here because the LoggingService will be injected
+  // into the AccountsService
+  // providers: [LoggingService]
 })
 export class NewAccountComponent {
   // Dependency Injection must also be used to let Angular instantiate the service for the component.
@@ -19,6 +21,6 @@ export class NewAccountComponent {
   onCreateAccount(accountName: string, accountStatus: string) {
     this.accountsService.addAccount(accountName, accountStatus)
     // Then the service can be used normally.
-    this.loggingService.logStatusChange(accountStatus);
+    // this.loggingService.logStatusChange(accountStatus);
   }
 }

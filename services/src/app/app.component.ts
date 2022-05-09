@@ -11,8 +11,7 @@ Angular does a hierarchical injection of service instances:
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers: [ AccountsService ]
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
   accounts: { name: string, status: string }[] = [];

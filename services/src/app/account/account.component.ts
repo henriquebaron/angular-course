@@ -9,7 +9,9 @@ instance of the AccountsService between the AppComponent and its child component
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css'],
-  providers: [LoggingService]
+  // The service was commented out from here because the LoggingService will be injected
+  // into the AccountsService
+  // providers: [LoggingService]
 })
 export class AccountComponent {
   @Input() account: { name: string, status: string };
@@ -19,6 +21,6 @@ export class AccountComponent {
 
   onSetTo(status: string) {
     this.accountsService.updateStatus(this.id, status);
-    this.loggingService.logStatusChange(status);
+    // this.loggingService.logStatusChange(status);
   }
 }
