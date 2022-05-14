@@ -8,7 +8,7 @@ import { RecipeService } from "../../recipe.service";
 	styleUrls: ['./recipe-item.component.css']
 })
 export class RecipeItemComponent implements OnInit {
-	@Input() recipe: Recipe = new Recipe('', '', '');
+	@Input() recipe: Recipe = new Recipe('', '', '', []);
 
 	constructor(private recipeService: RecipeService) { }
 
