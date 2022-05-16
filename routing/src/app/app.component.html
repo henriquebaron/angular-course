@@ -5,9 +5,14 @@
         <!-- The navigation with routes in Angular should be done with the "routerLink" directive,
         instead of the typical "href". This prevents the page to be update on the navigation, thus
         losing the application state. -->
+        <!-- Notes on the paths for the router: it works like a folder structure. 
+        "/" is the the main page (i.e. localhost:4200), so any path beginning with a slash is an absolute path.
+        No punctuation sign, or using "./" is equivalent to a relative path, like used below. It would have been
+        the same as "./servers".
+        The router also unterstands "../" to go back one level. -->
         <li role="presentation" class="active"><a routerLink="/">Home</a></li>
-        <li role="presentation"><a routerLink="/servers">Servers</a></li>
-        <li role="presentation"><a [routerLink]="['/users']">Users</a></li>
+        <li role="presentation"><a routerLink="servers">Servers</a></li>
+        <li role="presentation"><a [routerLink]="['users']">Users</a></li>
       </ul>
     </div>
   </div>
