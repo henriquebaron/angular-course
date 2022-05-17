@@ -1,2 +1,6 @@
 <p>User with ID {{ user.id }} loaded.</p>
 <p>User name is {{ user.name }}</p>
+<hr>
+<!-- The link below changes the route, but the fields above would not change with the
+code of the previous commit. See explanation on the user.component.ts file. -->
+<a [routerLink]="['/users', 10, 'Anna']">User 10 - Anna</a>
