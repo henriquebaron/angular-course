@@ -1,7 +1,13 @@
 <div class="row">
   <div class="col-xs-12 col-sm-4">
     <div class="list-group">
+      <!-- The propertier "queryParams" and "fragment" can be used to build the 
+      navigation link. The example below resolves to the link
+      /servers/5/edit?allowEdit=1#loading -->
       <a
+        [routerLink]="['/servers', 5, 'edit']" 
+        [queryParams]="{allowEdit: 1}" 
+        fragment="loading"
         href="#"
         class="list-group-item"
         *ngFor="let server of servers">
