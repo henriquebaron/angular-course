@@ -9,7 +9,7 @@ import { ServersService } from '../servers.service';
   styleUrls: ['./server.component.css']
 })
 export class ServerComponent implements OnInit {
-  server: {id: number, name: string, status: string};
+  server: { id: number, name: string, status: string };
 
   constructor(private serversService: ServersService, private route: ActivatedRoute, private router: Router) { }
 
@@ -24,7 +24,7 @@ export class ServerComponent implements OnInit {
   }
 
   onEdit(): void {
-    this.router.navigate(['edit'], { relativeTo: this.route });
+    this.router.navigate(['edit'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
   }
 
 }
