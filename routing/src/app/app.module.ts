@@ -11,17 +11,28 @@ import { UserComponent } from './users/user/user.component';
 import { EditServerComponent } from './servers/edit-server/edit-server.component';
 import { ServerComponent } from './servers/server/server.component';
 import { ServersService } from './servers/servers.service';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 // Elements of the route preceded with a colon ":" are parameters, which can be fetched on the component, for example
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'users', component: UsersComponent, children: [
+  {
+    path: 'users', component: UsersComponent, children: [
       { path: ':id/:name', component: UserComponent },
-    ] },
-  { path: 'servers', component: ServersComponent, children: [
+    ]
+  },
+  {
+    path: 'servers', component: ServersComponent, children: [
       { path: ':id', component: ServerComponent },
       { path: ':id/edit', component: EditServerComponent }
-    ] },
+    ]
+  },
+  { path: 'not-found', component: PageNotFoundComponent },
+  /* The double-asterisk is a wildcard route, which catches any unexpected route.
+  This must always be the LAST route of the array. All routes below ** will be redirected.
+  We also used the property "redirectTo" to redirect the requests for this wildcard route
+  to somewhere else. */
+  { path: '**', redirectTo: '/not-found' }
 ]
 @NgModule({
   declarations: [
@@ -31,7 +42,8 @@ const appRoutes: Routes = [
     ServersComponent,
     UserComponent,
     EditServerComponent,
-    ServerComponent
+    ServerComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
