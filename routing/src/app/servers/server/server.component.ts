@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { ServersService } from '../servers.service';
 
@@ -11,7 +11,7 @@ import { ServersService } from '../servers.service';
 export class ServerComponent implements OnInit {
   server: {id: number, name: string, status: string};
 
-  constructor(private serversService: ServersService, private route: ActivatedRoute) { }
+  constructor(private serversService: ServersService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     // Note: "+" works as a type cast operator (to number)
@@ -21,6 +21,10 @@ export class ServerComponent implements OnInit {
       const id: number = +params['id'];
       this.server = this.serversService.getServer(id);
     })
+  }
+
+  onEdit(): void {
+    this.router.navigate(['edit'], { relativeTo: this.route });
   }
 
 }
