@@ -28,6 +28,10 @@ const appRoutes: Routes = [
 	This must always be the LAST route of the array. All routes below ** will be redirected.
 	We also used the property "redirectTo" to redirect the requests for this wildcard route
 	to somewhere else. */
+	/* Another note on redirecting: the "path" is matched by prefix, which means that Angular
+	checks if the path *starts* with the given address. To avoid this, "pathMatch" can be
+	set to 'full' */
+	// { path: '**', redirectTo: '/not-found', pathMatch: 'full' }
 	{ path: '**', redirectTo: '/not-found' }
 ]
 /* The content which was before in the AppModule has been brought here. This is recommended
