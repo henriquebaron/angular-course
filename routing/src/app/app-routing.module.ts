@@ -9,6 +9,7 @@ import { EditServerComponent } from './servers/edit-server/edit-server.component
 import { ServerComponent } from './servers/server/server.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuardService } from "./auth-guard.service";
+import { CanDeactivateGuardService } from "./servers/edit-server/can-deactivate-guard.service";
 
 // Elements of the route preceded with a colon ":" are parameters, which can be fetched on the component, for example
 const appRoutes: Routes = [
@@ -24,7 +25,7 @@ const appRoutes: Routes = [
 		canActivateChild: [AuthGuardService],
 		component: ServersComponent, children: [
 			{ path: ':id', component: ServerComponent },
-			{ path: ':id/edit', component: EditServerComponent }
+			{ path: ':id/edit', canDeactivate: [CanDeactivateGuardService], component: EditServerComponent }
 		]
 	},
 	{ path: 'not-found', component: PageNotFoundComponent },
