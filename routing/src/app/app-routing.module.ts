@@ -54,6 +54,11 @@ is necessary to add the "exports" property to declare which imports of this modu
 accessible to any other module that imports AppRoutingModule. */
 @NgModule({
 	imports: [
+		/* useHash enables hash navigation, including a hash sign (#) between the domain name
+		and the rest of the route. This is used for compatibility with older browsers or servers
+		which cannot be configured to work with the "regular" route style. 
+		More information for the server configuration will be shown on the deployment section of the course. */
+		// RouterModule.forRoot(appRoutes, {useHash: true})
 		RouterModule.forRoot(appRoutes)
 	],
 	exports: [RouterModule]
