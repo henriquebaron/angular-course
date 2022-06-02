@@ -10,6 +10,7 @@ import { ServerComponent } from './servers/server/server.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuardService } from "./auth-guard.service";
 import { CanDeactivateGuardService } from "./servers/edit-server/can-deactivate-guard.service";
+import { ErrorPageComponent } from "./error-page/error-page.component";
 
 // Elements of the route preceded with a colon ":" are parameters, which can be fetched on the component, for example
 const appRoutes: Routes = [
@@ -28,7 +29,9 @@ const appRoutes: Routes = [
 			{ path: ':id/edit', canDeactivate: [CanDeactivateGuardService], component: EditServerComponent }
 		]
 	},
-	{ path: 'not-found', component: PageNotFoundComponent },
+	// { path: 'not-found', component: PageNotFoundComponent },
+	// The "data" element input here can be accessed by the component in the activated route
+	{ path: 'not-found', component: ErrorPageComponent, data: {message: 'Page not found!'} },
 	/* The double-asterisk is a wildcard route, which catches any unexpected route.
 	This must always be the LAST route of the array. All routes below ** will be redirected.
 	We also used the property "redirectTo" to redirect the requests for this wildcard route
