@@ -11,6 +11,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AuthGuardService } from "./auth-guard.service";
 import { CanDeactivateGuardService } from "./servers/edit-server/can-deactivate-guard.service";
 import { ErrorPageComponent } from "./error-page/error-page.component";
+import { ServerResolverService } from "./servers/server/server-resolver.service";
 
 // Elements of the route preceded with a colon ":" are parameters, which can be fetched on the component, for example
 const appRoutes: Routes = [
@@ -25,7 +26,11 @@ const appRoutes: Routes = [
 		// canActivate: [AuthGuardService],
 		canActivateChild: [AuthGuardService],
 		component: ServersComponent, children: [
-			{ path: ':id', component: ServerComponent },
+			/* Employing the resolver here. The data returned by the generic method resolve() is passed
+			to the element named "server".
+			Several resolvers can be declared within the curly braces, and all the elements will be available
+			inside the "data" property of the Route. */
+			{ path: ':id', component: ServerComponent, resolve: {server: ServerResolverService} },
 			{ path: ':id/edit', canDeactivate: [CanDeactivateGuardService], component: EditServerComponent }
 		]
 	},
