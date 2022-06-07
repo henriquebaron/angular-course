@@ -12,7 +12,7 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { FormsModule } from '@angular/forms';
 import { DropdownDirective } from './shared/dropdown.directive';
-import { EmptySelectionComponent } from './recipes/empty-selection/empty-selection.component';
+import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,7 @@ import { EmptySelectionComponent } from './recipes/empty-selection/empty-selecti
     ShoppingListComponent,
     ShoppingEditComponent,
     DropdownDirective,
-    EmptySelectionComponent,
+    RecipeStartComponent,
   ],
   imports: [
     BrowserModule,
