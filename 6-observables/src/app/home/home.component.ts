@@ -18,6 +18,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       let count = 0;
       setInterval(() => {
         observer.next(count);
+        if (count === 4) {
+          observer.complete();
+        }
         if (count > 5) {
           observer.error(new Error('Count is greater than 5!'));
         }
@@ -30,7 +33,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, error => {
       console.log(error);
       alert(error.message);
-    })
+    }, () => {
+      console.log('Completed!');
+    });
   }
 
   // Unsubscribing from observables is extremely important to avoid memory leaks.
