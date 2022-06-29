@@ -1,11 +1,12 @@
-import { EventEmitter, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { Ingredient } from "../shared/ingredient.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingListService {
-	ingredientsChanged = new EventEmitter<Ingredient[]>();
+	ingredientsChanged = new Subject<Ingredient[]>();
 
   private ingredients: Ingredient[] = [
     new Ingredient('Apples', 5),
@@ -18,7 +19,7 @@ export class ShoppingListService {
 
   addIngredient(newIngredient: Ingredient): void {
     this.ingredients.push(newIngredient);
-		this.ingredientsChanged.emit(this.ingredients.slice());
+		this.ingredientsChanged.next(this.ingredients.slice());
   }
 
   addMultipleIngredients(newIngredients: Ingredient[]): void {
@@ -26,6 +27,6 @@ export class ShoppingListService {
     // Note on JavaScript: ... is a "spread operator". It spreads the array in a list of elements,
     // thus allowing to pass an array to the push() method.
     this.ingredients.push(...newIngredients);
-    this.ingredientsChanged.emit(this.ingredients.slice());
+    this.ingredientsChanged.next(this.ingredients.slice());
   }
 }
