@@ -1,3 +1,10 @@
 .container {
   margin-top: 30px;
 }
+
+/* According to the properties of the form and control objects, angular
+adds the corresponding classes to facilitate styling. Here, the input and
+select controls which are already touched AND invalid are highlighted in red */
+input.ng-invalid.ng-touched, select.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
