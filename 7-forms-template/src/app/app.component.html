@@ -10,8 +10,9 @@
           <button class="btn btn-default" type="button">Suggest an Username</button>
           <div class="form-group">
             <label for="email">Mail</label>
-            <input ngModel name="email" type="email" id="email" class="form-control" required email>
+            <input ngModel name="email" type="email" id="email" class="form-control" required email #email="ngModel">
           </div>
+          <span class="help-block" *ngIf="!email.valid && email.touched">Please enter a valid e-mail!</span>
         </div>
         <div class="form-group">
           <label for="secret">Secret Questions</label>
