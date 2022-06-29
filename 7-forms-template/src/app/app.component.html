@@ -10,7 +10,7 @@
             <label for="username">Username</label>
             <input ngModel name="username" type="text" id="username" class="form-control" required>
           </div>
-          <button class="btn btn-default" type="button">Suggest an Username</button>
+          <button class="btn btn-default" type="button" (click)="suggestUserName()">Suggest an Username</button>
           <div class="form-group">
             <label for="email">Mail</label>
             <!-- ngModel without property binding is used to tell Angular to link the element with the Form model -->
