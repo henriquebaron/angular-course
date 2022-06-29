@@ -10,17 +10,24 @@
           <button class="btn btn-default" type="button">Suggest an Username</button>
           <div class="form-group">
             <label for="email">Mail</label>
+            <!-- ngModel without property binding is used to tell Angular to link the element with the Form model -->
             <input ngModel name="email" type="email" id="email" class="form-control" required email #email="ngModel">
           </div>
           <span class="help-block" *ngIf="!email.valid && email.touched">Please enter a valid e-mail!</span>
         </div>
         <div class="form-group">
           <label for="secret">Secret Questions</label>
-          <select ngModel name="secret" id="secret" class="form-control">
+          <!-- Here, one-way property binding was used to populate the default input value -->
+          <select [ngModel]="defaultQuestion" name="secret" id="secret" class="form-control">
             <option value="pet">Your first Pet?</option>
             <option value="teacher">Your first teacher?</option>
           </select>
         </div>
+        <div class="form-group">
+          <!-- Two-way binding can be used when an response to the input process is needed. -->
+          <textarea name="questionAnswer" rows="3" class="form-control" [(ngModel)]="answer"></textarea>
+        </div>
+        <p>Your reply: {{ answer }}</p>
         <!-- The form object holds several properties for its state, for example, "touched", "dirty", or "valid".
         Here the "valid" property is being used to disable the Submit button. -->
         <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Submit</button>

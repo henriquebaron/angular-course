@@ -10,6 +10,8 @@ export class AppComponent {
   /* As already seen before, @ViewChild allows to access data of a labeled reference in the HTML template.
   So it's an alternative way to access the form data. */
   @ViewChild('f') signupForm: NgForm;
+  defaultQuestion: string = 'pet';
+  answer: string = '';
 
   suggestUserName() {
     const suggestedName = 'Superuser';
