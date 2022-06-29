@@ -2,7 +2,10 @@
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
       <form (ngSubmit)="onSubmit()" #f="ngForm">
-        <div id="user-data">
+        <!-- Using the Angular directive on an element and then referencing the directive in the tag (like below in #userData) is a "trick"
+        that allows to access the Javascript object properties. The same is done with the email input of this page. -->
+        <!-- The directive ngModelGroup allows to combine (group) several elements of a formular. -->
+        <div id="user-data" ngModelGroup="userData" #userData="ngModelGroup">
           <div class="form-group">
             <label for="username">Username</label>
             <input ngModel name="username" type="text" id="username" class="form-control" required>
@@ -12,9 +15,10 @@
             <label for="email">Mail</label>
             <!-- ngModel without property binding is used to tell Angular to link the element with the Form model -->
             <input ngModel name="email" type="email" id="email" class="form-control" required email #email="ngModel">
+            <span class="help-block" *ngIf="!email.valid && email.touched">Please enter a valid e-mail!</span>
           </div>
-          <span class="help-block" *ngIf="!email.valid && email.touched">Please enter a valid e-mail!</span>
         </div>
+        <p *ngIf="!userData.valid && userData.touched">User Data is invalid!</p>
         <div class="form-group">
           <label for="secret">Secret Questions</label>
           <!-- Here, one-way property binding was used to populate the default input value -->
