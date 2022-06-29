@@ -32,6 +32,11 @@
           <textarea name="questionAnswer" rows="3" class="form-control" [(ngModel)]="answer"></textarea>
         </div>
         <p>Your reply: {{ answer }}</p>
+        <div class="radio" *ngFor="let gender of genders">
+          <label>
+            <input type="radio" name="gender" ngModel [value]="gender" required> {{ gender }}
+          </label>
+        </div>
         <!-- The form object holds several properties for its state, for example, "touched", "dirty", or "valid".
         Here the "valid" property is being used to disable the Submit button. -->
         <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Submit</button>
