@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,9 @@ export class AppComponent implements OnInit {
         /* The reference of the customer validator is passed. But I have to manually bind it to my 
          * component, because the method is not executed inside the component, but by Angular. */
         'username': new FormControl(null, [Validators.required, this.forbiddenNames.bind(this)]),
-        'email': new FormControl(null, [Validators.required, Validators.email]),
+        /* The next argument of the constructor of FormControl is the place to input the asynchronous validators.
+         * In this case it is not necessary to bind: the validator method does not access any element of the component (this.<element>) */
+        'email': new FormControl(null, [Validators.required, Validators.email], this.forbiddenEmails),
       }),
       'gender': new FormControl('male'),
       'hobbies': new FormArray([])
@@ -50,6 +53,20 @@ export class AppComponent implements OnInit {
     }
     // In order for the input to be valid, the method must return "null". Returning e.g. { 'nameIsForbidden':  false } would not work
     return null;
+  }
+
+  // Asynchronous validators, as any asynchronous function, return Promise or Observable
+  forbiddenEmails(control: FormControl): Promise<any> | Observable<any> {
+    const promise = new Promise<any>((resolve, reject) => {
+      setTimeout(() => {
+        if (control.value === 'test@test.com') {
+          resolve({ 'emailIsForbidden': true });
+        } else {
+          resolve(null);
+        }
+      }, 1500);
+    });
+    return promise;
   }
 
 }
