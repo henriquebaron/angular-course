@@ -1,3 +1,10 @@
 .container {
   margin-top: 30px;
 }
+
+/* Since the CSS classes are still added to the controls on real time, 
+there is no change in the way of working on regard to styling. */
+
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
