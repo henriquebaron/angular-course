@@ -14,8 +14,11 @@ export class AppComponent implements OnInit {
     /* On the reactive forms, the validation is not done in the HTML template anymore. An array of references to methods of the
      * class Validators must be passed. */
     this.signupForm = new FormGroup({
-      'username': new FormControl(null, Validators.required),
-      'email': new FormControl(null, [Validators.required, Validators.email]),
+      // The reactive approach allows the nesting of controls using FormGroup objects inside each other.
+      'userData': new FormGroup({
+        'username': new FormControl(null, Validators.required),
+        'email': new FormControl(null, [Validators.required, Validators.email]),
+      }),
       'gender': new FormControl('male')
     });
   }
