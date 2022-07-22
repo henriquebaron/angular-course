@@ -24,6 +24,15 @@
             <span *ngIf="signupForm.get('userData.email').invalid && signupForm.get('userData.email').touched" class="help-block">Please enter a valid e-mail address!</span>
           </div>
         </div>
+        <div formArrayName="hobbies">
+          <h4>Your Hobbies</h4>
+          <button class="btn btn-default" type="button" (click)="onAddHobby()">Add hobby</button>
+          <div class="form-group" *ngFor="let hobbyControl of hobbyControls; let i = index">
+            <!-- The square brackets for property binding have to be used now because it's not the name of a variable that is being
+            passed as a string, but the variable itself. -->
+            <input type="text" class="form-control" [formControlName]="i">
+          </div>
+        </div>
         <div class="radio" *ngFor="let gender of genders">
           <label>
             <input
