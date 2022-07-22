@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +11,11 @@ export class AppComponent implements OnInit {
   signupForm: FormGroup;
 
   ngOnInit() {
+    /* On the reactive forms, the validation is not done in the HTML template anymore. An array of references to methods of the
+     * class Validators must be passed. */
     this.signupForm = new FormGroup({
-      'username': new FormControl(null),
-      'email': new FormControl(null),
+      'username': new FormControl(null, Validators.required),
+      'email': new FormControl(null, [Validators.required, Validators.email]),
       'gender': new FormControl('male')
     });
   }
