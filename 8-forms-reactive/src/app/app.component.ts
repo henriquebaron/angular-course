@@ -44,6 +44,8 @@ export class AppComponent implements OnInit {
   // Return type of the custom validator is a JS key-value-pair object.
   forbiddenNames(control: FormControl): { [s: string]: boolean } {
     if (this.forbiddenUsernames.indexOf(control.value) !== -1) {
+      /* This key-value pair is added to the "errors" element of the control object.
+       * (This is why you should return "null" if there is no validation errors) */
       return { 'nameIsForbidden': true };
     }
     // In order for the input to be valid, the method must return "null". Returning e.g. { 'nameIsForbidden':  false } would not work
