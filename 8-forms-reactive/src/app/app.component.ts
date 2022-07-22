@@ -34,11 +34,25 @@ export class AppComponent implements OnInit {
     });
     this.signupForm.valueChanges.subscribe((value) => console.log(value)); // Returns the whole new value of the Form
     this.signupForm.statusChanges.subscribe((value) => console.log(value)); // Returns only the new state of the Form
+    this.signupForm.setValue({ // setValue requires all the values of the form to be passed
+      'userData': {
+        'username': 'Henrique',
+        'email': 'henrique@test.com'
+      },
+      'gender': 'male',
+      'hobbies': []
+    });
+    this.signupForm.patchValue({ // patchValue allows to set the values of only some of the controls
+      'userData': {
+        'username': 'Markus',
+      }
+    });
   }
 
   onSubmit() {
     // With the reactive approach, it is not needed to extra declare the form object, since it's inherently part of the component class
     console.log(this.signupForm);
+    this.signupForm.reset(); // Resets the form. Control values can also be passed as argument to "redefine" standard values.
   }
 
   onAddHobby() {
