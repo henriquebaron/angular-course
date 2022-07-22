@@ -18,4 +18,9 @@ export class AppComponent implements OnInit {
     });
   }
 
+  onSubmit() {
+    // With the reactive approach, it is not needed to extra declare the form object, since it's inherently part of the component class
+    console.log(this.signupForm);
+  }
+
 }
