@@ -11,7 +11,7 @@
             {{ server.status }}
           </span>
           <!-- Reference to the usage of pipes can be found at https://angular.io/api?query=pipe -->
-          <strong>{{ server.name | shorten }}</strong> |
+          <strong>{{ server.name | shorten:20 }}</strong> |
           {{ server.instanceType | uppercase }} |
           <!-- When chaining pipes, the order is important: the line below works: -->
           {{ server.started | date:'fullDate' | uppercase }}
