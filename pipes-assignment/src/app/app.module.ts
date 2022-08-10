@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { RevertPipe } from './revert.pipe';
+import { SortPipe } from './sort.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RevertPipe
+    RevertPipe,
+    SortPipe
   ],
   imports: [
     BrowserModule,
