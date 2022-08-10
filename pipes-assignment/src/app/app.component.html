@@ -14,7 +14,7 @@
           [ngClass]="getStatusClasses(server)">
           <span
             class="badge">
-            {{ server.status }}
+            {{ server.status | revert }}
           </span>
           <strong>{{ server.name }}</strong> |
           {{ server.instanceType | uppercase }} |
