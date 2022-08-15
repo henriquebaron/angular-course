@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { Post } from './post.model';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  loadedPosts = [];
+  loadedPosts: Post[] = [];
   private readonly url = 'https://angular-course-168ed-default-rtdb.firebaseio.com/';
 
   constructor(private http: HttpClient) { }
@@ -17,9 +18,9 @@ export class AppComponent implements OnInit {
     this.fetchPosts();
   }
 
-  onCreatePost(postData: { title: string; content: string }) {
+  onCreatePost(postData: Post) {
     // Send Http request
-    this.http.post(this.url + 'posts.json', postData).subscribe(responseData => { // HTTP requests are only sent if the subscribe function is called
+    this.http.post<{ name: string }>(this.url + 'posts.json', postData).subscribe(responseData => { // HTTP requests are only sent if the subscribe function is called
       console.log(responseData);
     });
   }
@@ -34,8 +35,8 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
-    this.http.get(this.url + 'posts.json').pipe(map(responseData => {
-      const postsArray = [];
+    this.http.get<{ [key: string]: Post }>(this.url + 'posts.json').pipe(map(responseData => {
+      const postsArray: Post[] = [];
       for (const key in responseData) {
         if (responseData.hasOwnProperty(key)) {
           postsArray.push({ ...responseData[key], id: key });
@@ -43,7 +44,7 @@ export class AppComponent implements OnInit {
       }
       return postsArray;
     })).subscribe(posts => {
-      console.log(posts);
+      this.loadedPosts = posts;
     });
   }
 }
