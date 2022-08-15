@@ -20,17 +20,11 @@ export class AuthInterceptorService implements HttpInterceptor {
   constructor() {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(req.url);
     // I have to create a new request object, because the one passed in the argument is immutable.
     const modifiedRequest = req.clone({
       headers: req.headers.append("Auth", "xyz"),
     });
     // Finally, the newly created (and modified) copy of the request is sent
-    return next.handle(modifiedRequest).pipe(tap(event => { // I always receive back an event here, so I have full control on what is coming
-      if (event.type == HttpEventType.Response) {
-        console.log('Response arrived. Body data:');
-        console.log(event.body);
-      }
-    }));
+    return next.handle(modifiedRequest);
   }
 }
