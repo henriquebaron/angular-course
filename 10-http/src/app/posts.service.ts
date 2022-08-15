@@ -40,4 +40,8 @@ export class PostsService {
         })
       );
   }
+
+  deleteAllPosts() {
+    return this.http.delete(this.url + "posts.json");
+  }
 }

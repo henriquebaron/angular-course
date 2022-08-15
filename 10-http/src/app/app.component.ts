@@ -22,12 +22,13 @@ export class AppComponent implements OnInit {
   }
 
   onFetchPosts() {
-    // Send Http request
     this.fetchPosts();
   }
 
   onClearPosts() {
-    // Send Http request
+    this.postsService.deleteAllPosts().subscribe(() => {
+      this.fetchPosts();
+    });
   }
 
   private fetchPosts() {
