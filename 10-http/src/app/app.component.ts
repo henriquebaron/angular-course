@@ -10,6 +10,7 @@ import { Post } from './post.model';
 })
 export class AppComponent implements OnInit {
   loadedPosts: Post[] = [];
+  isFetching = false;
   private readonly url = 'https://angular-course-168ed-default-rtdb.firebaseio.com/';
 
   constructor(private http: HttpClient) { }
@@ -35,6 +36,7 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
+    this.isFetching = true;
     this.http.get<{ [key: string]: Post }>(this.url + 'posts.json').pipe(map(responseData => {
       const postsArray: Post[] = [];
       for (const key in responseData) {
@@ -44,6 +46,7 @@ export class AppComponent implements OnInit {
       }
       return postsArray;
     })).subscribe(posts => {
+      this.isFetching = false;
       this.loadedPosts = posts;
     });
   }
