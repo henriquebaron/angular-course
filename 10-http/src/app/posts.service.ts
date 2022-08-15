@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Subject, throwError } from "rxjs";
 import { map, catchError } from "rxjs/operators";
@@ -30,8 +30,16 @@ export class PostsService {
   }
 
   fetchPosts() {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('print', 'pretty')
+    queryParams = queryParams.append('custom', 'key') // Several query parameters can be added this way (this second is just an example, has no effect)
     return this.http
-      .get<{ [key: string]: Post }>(this.url + "posts.json")
+      .get<{ [key: string]: Post }>(this.url + "posts.json",
+      {
+        headers: new HttpHeaders({ 'Customer-Header': 'Hello' }), // This allows to add any custom header that is needed
+        // params: new HttpParams().set('print', 'pretty') // This is an alternative way to set the parameters directly.
+        params: queryParams
+      })
       .pipe(
         map((responseData) => {
           const postsArray: Post[] = [];
