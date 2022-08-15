@@ -45,7 +45,12 @@ export class AppComponent implements OnInit, OnDestroy {
     }, error => {
       console.log(error);
       this.error = error.message;
+      this.isFetching = false;
     });
+  }
+
+  onHandleError() {
+    this.error = null;
   }
 
   ngOnDestroy(): void {
