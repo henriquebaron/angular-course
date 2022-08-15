@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Post } from "./post.model";
 
@@ -9,6 +10,8 @@ import { Post } from "./post.model";
 export class PostsService {
   private readonly url =
     "https://angular-course-168ed-default-rtdb.firebaseio.com/";
+
+  error = new Subject<string>();
 
   constructor(private http: HttpClient) {}
 
@@ -21,6 +24,8 @@ export class PostsService {
         // HTTP requests are only sent if the subscribe function is called. Otherwise Angular considers that it's not
         // necessary to make the request, since "nobody's interested".
         console.log(responseData);
+      }, error => {
+        this.error.next(error.message);
       });
   }
 
