@@ -8,14 +8,17 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent implements OnInit {
   loadedPosts = [];
+  private readonly url = 'https://angular-course-168ed-default-rtdb.firebaseio.com/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onCreatePost(postData: { title: string; content: string }) {
     // Send Http request
-    console.log(postData);
+    this.http.post(this.url + 'posts.json', postData).subscribe(responseData => { // HTTP requests are only sent if the subscribe function is called
+      console.log(responseData);
+    });
   }
 
   onFetchPosts() {
