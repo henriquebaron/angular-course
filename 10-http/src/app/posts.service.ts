@@ -70,6 +70,8 @@ export class PostsService {
       .delete(this.url + "posts.json", {
         // Here, I am subscribing to the events, which are being processed below.
         observe: "events",
+        // responseType: 'json' // Default value for the response type
+        responseType: 'text' // This basically changes the way the response is interpreted. What you need depends on what your server replies to you
       })
       .pipe(
         tap((event) => {
