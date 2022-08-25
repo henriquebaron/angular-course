@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LoadChildrenCallback, RouterModule, Routes } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
-import { AuthModule } from './auth/auth.module';
 
 /* To lazy load the recipes module:
  * 1. Remove all imports/references of the RecipesModule from the AppModule
@@ -19,7 +17,23 @@ import { AuthModule } from './auth/auth.module';
  *    More details on the Recipes Routing Module */
 const routes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
-  { path: 'recipes', loadChildren: () => import('./recipes/recipes.module').then(mod => mod.RecipesModule) }
+  {
+    path: 'recipes',
+    loadChildren: () =>
+      import('./recipes/recipes.module').then((mod) => mod.RecipesModule),
+  },
+  {
+    path: 'shopping-list',
+    loadChildren: () =>
+      import('./shopping-list/shopping-list.module').then(
+        (mod) => mod.ShoppingListModule
+      ),
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./auth/auth.module').then((mod) => mod.AuthModule),
+  },
 ];
 
 @NgModule({
@@ -31,10 +45,8 @@ const routes: Routes = [
     BrowserModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
-    ShoppingListModule,
     SharedModule,
     CoreModule,
-    AuthModule
   ],
   bootstrap: [AppComponent],
 })
