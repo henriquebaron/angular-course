@@ -1,7 +1,13 @@
-import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
 import { AuthResponseData, AuthService } from './auth.service';
@@ -11,7 +17,7 @@ import { AuthResponseData, AuthService } from './auth.service';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css'],
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode: boolean = true;
   isLoading: boolean = false;
   error?: string = undefined;
@@ -19,6 +25,8 @@ export class AuthComponent implements OnInit {
   This directive was created exposing the ViewContainerRef of the element calling the directive. */
   // ! after the variable name is a "null-assertion operator", that tells the compiler that "I'm sure this expression won't be null or undefined"
   @ViewChild(PlaceholderDirective) alertHost!: PlaceholderDirective;
+
+  private closeSub: Subscription = new Subscription();
 
   // constructor(private auth: AuthService, private router: Router, private componentFactoryResolver: ComponentFactoryResolver) {}
   constructor(private auth: AuthService, private router: Router) {}
@@ -37,7 +45,9 @@ export class AuthComponent implements OnInit {
       let authObservable: Observable<AuthResponseData>;
 
       this.isLoading = true;
-      authObservable = this.isLoginMode ? this.auth.login(email, password) : this.auth.signUp(email, password);
+      authObservable = this.isLoginMode
+        ? this.auth.login(email, password)
+        : this.auth.signUp(email, password);
       authObservable.subscribe(
         (resData) => {
           console.log(resData);
@@ -64,6 +74,17 @@ export class AuthComponent implements OnInit {
     // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
     const hostViewContainerRef = this.alertHost.viewContainerRef;
     hostViewContainerRef.clear(); // Clear any previously rendered component here.
-    const createdComponent = hostViewContainerRef.createComponent(AlertComponent);
+    const componentRef = hostViewContainerRef.createComponent(AlertComponent);
+    componentRef.instance.message = message;
+    this.closeSub = componentRef.instance.close.subscribe(() => {
+      this.closeSub.unsubscribe();
+      hostViewContainerRef.clear();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.closeSub) {
+      this.closeSub.unsubscribe();
+    }
   }
 }
