@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -11,6 +11,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { RecipesModule } from './recipes/recipes.module';
 import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { SharedModule } from './shared/shared.module';
+import { CoreModule } from './core.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
@@ -27,13 +28,12 @@ const routes: Routes = [
     BrowserModule,
     RouterModule.forRoot(routes),
     FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
     RecipesModule,
     ShoppingListModule,
     SharedModule,
+    CoreModule,
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
