@@ -10,16 +10,16 @@ import { Recipe } from './recipe.model';
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
 
-  private recipes: Recipe[] = [
-    new Recipe('Test Recipe', 'This is just a test!', "../../../assets/images/limoncello.jpg", [
-      new Ingredient('Lemon', 1),
-      new Ingredient('Milk', 300)
-    ]),
-    new Recipe('Second test recipe', 'This is another test', "../../../assets/images/lasagna.jpg", [
-      new Ingredient('Meat', 1),
-      new Ingredient('Pasta sheet', 5)
-    ])
-  ];
+  private recipes: Recipe[] = []
+  //   new Recipe('Test Recipe', 'This is just a test!', "../../../assets/images/limoncello.jpg", [
+  //     new Ingredient('Lemon', 1),
+  //     new Ingredient('Milk', 300)
+  //   ]),
+  //   new Recipe('Second test recipe', 'This is another test', "../../../assets/images/lasagna.jpg", [
+  //     new Ingredient('Meat', 1),
+  //     new Ingredient('Pasta sheet', 5)
+  //   ])
+  // ];
 
   constructor(private shoppingListService: ShoppingListService) { }
 
