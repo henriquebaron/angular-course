@@ -32,14 +32,8 @@ export class DataStorageService {
     So I use the "exhaustMap" operator to chain two subscriptions together, changing the output type.
     With the operator, as soon as the data from the first subscription (user) is fetched, it is used
     as data for the result of the following subscription. */
-    return this.authService.user.pipe(
-      take(1),
-      exhaustMap((user) => {
-        return this.http.get<Recipe[]>(this.url + 'recipes.json',
-        {
-          params: new HttpParams().set('auth', user ? user.token : '')
-        });
-      }),
+      return this.http.get<Recipe[]>(this.url + 'recipes.json')
+      .pipe(
       map((recipes) => {
         return recipes.map((recipe) => {
           return {
