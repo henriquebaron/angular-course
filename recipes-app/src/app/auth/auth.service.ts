@@ -79,7 +79,7 @@ export class AuthService {
       id: string;
       _token: string;
       _tokenExpirationDate: string;
-    } = JSON.parse(localStorage.getItem('userData') ?? ''); // Null coalescing operator, since I'm working in 'strict' mode
+    } = JSON.parse(localStorage.getItem('userData') ?? '{}'); // Null coalescing operator, since I'm working in 'strict' mode
     if (!userData) return;
     const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
 
@@ -133,7 +133,7 @@ export class AuthService {
     const expirationDate: Date = new Date(new Date().getTime() + expiresIn);
     const user = new User(email, userId, token, expirationDate);
     this.user.next(user);
-    this.autoLogout(expiresIn * 1000);
+    this.autoLogout(expiresIn);
     localStorage.setItem('userData', JSON.stringify(user));
   }
 }
