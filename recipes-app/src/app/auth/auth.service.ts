@@ -27,6 +27,8 @@ export class AuthService {
    * of the last Subject update, even if they subscribed after the last update was triggered. */
   user = new BehaviorSubject<User | null>(null);
 
+  private tokenExpirationTimer: any;
+
   constructor(private http: HttpClient, private router: Router) {}
 
   signUp(email: string, password: string) {
@@ -83,12 +85,26 @@ export class AuthService {
 
     if (loadedUser.token) {
       this.user.next(loadedUser);
+      const expirationTime = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+      this.autoLogout(expirationTime);
     }
   }
 
   logout() {
     this.user.next(null);
     this.router.navigate(['/auth']);
+    localStorage.removeItem('userData');
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
+  }
+
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
+    // }, 2000); // This can be used just for testing
   }
 
   private handleError(errorResponse: HttpErrorResponse) {
@@ -117,6 +133,7 @@ export class AuthService {
     const expirationDate: Date = new Date(new Date().getTime() + expiresIn);
     const user = new User(email, userId, token, expirationDate);
     this.user.next(user);
+    this.autoLogout(expiresIn * 1000);
     localStorage.setItem('userData', JSON.stringify(user));
   }
 }
