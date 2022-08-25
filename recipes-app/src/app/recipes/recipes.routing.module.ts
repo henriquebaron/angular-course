@@ -34,6 +34,6 @@ const routes: Routes = [
   // The insertion of the routes is done only once with "forRoot", in the App Module.
   // In all the other modules, "forChild" should be used.
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule], // This export is necessary because the Router Module is used by the Recipes Module
 })
 export class RecipesRoutingModule {}
