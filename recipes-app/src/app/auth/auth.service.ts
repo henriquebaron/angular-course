@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Subject, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Subject, tap, throwError } from 'rxjs';
 import { User } from './user.model';
 
 export interface AuthResponseData {
@@ -22,7 +22,9 @@ export class AuthService {
     'https://identitytoolkit.googleapis.com/v1/accounts:';
   private urlPostfix: string = '?key=AIzaSyBtJGxTeTbGwoDo5wogrYM7dMWLQ4hxuVU';
 
-  user = new Subject<User>();
+  /* The BehaviorSubject works pretty much like the regular Subject, but the subscribers can access the value
+   * of the last Subject update, even if they subscribed after the last update was triggered. */
+  user = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient) {}
 
