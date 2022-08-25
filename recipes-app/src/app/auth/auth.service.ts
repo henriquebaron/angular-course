@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { catchError, Subject, tap, throwError } from 'rxjs';
+import { User } from './user.model';
 
 export interface AuthResponseData {
   idToken: string;
@@ -21,6 +22,8 @@ export class AuthService {
     'https://identitytoolkit.googleapis.com/v1/accounts:';
   private urlPostfix: string = '?key=AIzaSyBtJGxTeTbGwoDo5wogrYM7dMWLQ4hxuVU';
 
+  user = new Subject<User>();
+
   constructor(private http: HttpClient) {}
 
   signUp(email: string, password: string) {
@@ -31,19 +34,38 @@ export class AuthService {
         password: password,
         returnSecureToken: true,
       })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        tap((responseData) =>
+          this.handleAuthentication(
+            responseData.email,
+            responseData.localId,
+            responseData.idToken,
+            +responseData.expiresIn * 1000
+          )
+        )
+      );
   }
 
   login(email: string, password: string) {
     let apiFunction = 'signInWithPassword';
-    return this.http.post<AuthResponseData>(
-      this.urlPrefix + apiFunction + this.urlPostfix,
-      {
+    return this.http
+      .post<AuthResponseData>(this.urlPrefix + apiFunction + this.urlPostfix, {
         email: email,
         password: password,
         returnSecureToken: true,
       })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        tap((responseData) =>
+          this.handleAuthentication(
+            responseData.email,
+            responseData.localId,
+            responseData.idToken,
+            +responseData.expiresIn * 1000
+          )
+        )
+      );
   }
 
   private handleError(errorResponse: HttpErrorResponse) {
@@ -61,5 +83,16 @@ export class AuthService {
       }
     }
     return throwError(() => new Error(errorMessage));
+  }
+
+  private handleAuthentication(
+    email: string,
+    userId: string,
+    token: string,
+    expiresIn: number
+  ) {
+    const expirationDate: Date = new Date(new Date().getTime() + expiresIn);
+    const user = new User(email, userId, token, expirationDate);
+    this.user.next(user);
   }
 }
