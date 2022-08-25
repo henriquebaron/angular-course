@@ -7,9 +7,12 @@ import { RecipeStartComponent } from './recipe-start/recipe-start.component';
 import { RecipesResolverService } from './recipes-resolver.service';
 import { RecipesComponent } from './recipes.component';
 
+/* When enabling lazy loading, the first path was changed from 'recipes' to ''.
+ * That's because once the module is lazy-loaded, the application is already on the
+ * '/recipes' route. So all the routes declared below will be relative to '/recipes' */
 const routes: Routes = [
   {
-    path: 'recipes',
+    path: '',
     component: RecipesComponent,
     canActivate: [AuthGuard],
     children: [
