@@ -21,12 +21,13 @@ const routes: Route[] = [
   },
   {
     path: 'dashboard',
-    /* Classic way of lazy loading routes: A whole module with the 
-     * desired routes is loaded with the "loadChildren" function. Note
-     * that the class is a "Module" */
+    /* Introduced in Angular 14: loading a set of routes/components lazily, like
+     * it was done when importing a routing module. Here the whole Module files were
+     * replaced by a constant which contains the routes. All components there are
+     * standalone. Note that the calling function is still "loadChildren" */
     loadChildren: () =>
-      import('./dashboard/dashboard-routing.module').then(
-        (mod) => mod.DashboardRoutingModule
+      import('./dashboard/routes').then(
+        (mod) => mod.DASHBOARD_ROUTES
       ),
   },
 ];
