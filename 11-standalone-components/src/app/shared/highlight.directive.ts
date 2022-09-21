@@ -1,6 +1,10 @@
 import { Directive, ElementRef } from '@angular/core';
 
 @Directive({
+  /* Converted the directive to standalone. For this reason, the
+   * SharedModule has been deleted altogether. The only element it
+   * contained was the HighlightDirective. */
+  standalone: true,
   selector: '[appHighlight]',
 })
 export class HighlightDirective {
