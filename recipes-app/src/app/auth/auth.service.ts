@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, Subject, tap, throwError } from 'rxjs';
 import { User } from './user.model';
+import { environment } from 'src/environments/environment';
 
 export interface AuthResponseData {
   idToken: string;
@@ -21,7 +22,7 @@ export class AuthService {
   //   'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBtJGxTeTbGwoDo5wogrYM7dMWLQ4hxuVU';
   private urlPrefix: string =
     'https://identitytoolkit.googleapis.com/v1/accounts:';
-  private urlPostfix: string = '?key=AIzaSyBtJGxTeTbGwoDo5wogrYM7dMWLQ4hxuVU';
+  private urlPostfix: string = '?key=' + environment.firebaseAPIkey;
 
   /* The BehaviorSubject works pretty much like the regular Subject, but the subscribers can access the value
    * of the last Subject update, even if they subscribed after the last update was triggered. */
