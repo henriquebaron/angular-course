@@ -9,6 +9,8 @@ import { HeaderComponent } from './header/header.component';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import * as fromApp from './store/app.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth/store/auth.effects';
 
 /* To lazy load the recipes module:
  * 1. Remove all imports/references of the RecipesModule from the AppModule
@@ -46,6 +48,7 @@ const routes: Routes = [
     HttpClientModule,
     // Declaration of the Store with its structure (so far only the shopping list)
     StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects]),
     SharedModule,
     CoreModule,
   ],

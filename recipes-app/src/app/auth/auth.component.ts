@@ -11,6 +11,9 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
 import { AuthResponseData, AuthService } from './auth.service';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -29,7 +32,11 @@ export class AuthComponent implements OnInit, OnDestroy {
   private closeSub: Subscription = new Subscription();
 
   // constructor(private auth: AuthService, private router: Router, private componentFactoryResolver: ComponentFactoryResolver) {}
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private store: Store<fromApp.AppState>
+  ) {}
 
   ngOnInit(): void {}
 
@@ -45,9 +52,12 @@ export class AuthComponent implements OnInit, OnDestroy {
       let authObservable: Observable<AuthResponseData>;
 
       this.isLoading = true;
-      authObservable = this.isLoginMode
-        ? this.auth.login(email, password)
-        : this.auth.signUp(email, password);
+      if (this.isLoginMode) {
+        // authObservable = this.auth.login(email, password)
+        this.store.dispatch(new AuthActions.LoginStart({ email: email, password: password }));
+      } else {
+        authObservable = this.auth.signUp(email, password);
+      }
       authObservable.subscribe(
         (resData) => {
           console.log(resData);
