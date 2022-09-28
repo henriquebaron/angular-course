@@ -46,7 +46,7 @@ export class AuthEffects {
               const expirationTime = new Date(
                 new Date().getTime() + +resData.expiresIn * 1000
               );
-              return new AuthActions.Login({
+              return new AuthActions.AuthenticateSuccess({
                 email: resData.email,
                 userId: resData.localId,
                 token: resData.idToken,
@@ -74,7 +74,7 @@ export class AuthEffects {
                     errorMessage = 'The password is incorrect.';
                 }
               }
-              return of(new AuthActions.LoginFail(errorMessage));
+              return of(new AuthActions.AuthenticateFail(errorMessage));
             })
           );
       })
@@ -86,7 +86,7 @@ export class AuthEffects {
   authSuccess$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthActions.LOGIN),
+        ofType(AuthActions.AUTHENTICATE_SUCCESS),
         tap(() => {
           this.router.navigate(['/']);
         })
