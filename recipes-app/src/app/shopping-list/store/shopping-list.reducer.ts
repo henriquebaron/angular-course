@@ -1,17 +1,13 @@
 import { Ingredient } from "../../shared/ingredient.model";
 import * as ShoppingListActions from "./shopping-list.actions";
 
-export interface ShoppingListState {
+export interface State {
   ingredients: Ingredient[],
   editedIngredient: Ingredient,
   editedIngredientIndex: number
 }
 
-export interface AppState {
-  shoppingList: ShoppingListState;
-}
-
-const initialState: ShoppingListState = {
+const initialState: State = {
   ingredients: [
     new Ingredient('Apples', 5),
     new Ingredient('Tomatoes', 10)
@@ -25,7 +21,7 @@ const initialState: ShoppingListState = {
  * changing the inputs*.
  * That is why a new object is returned, and the spread operator is used in the returned
  * object to include a copy of the previous state. */
-export function shoppingListReducer(state: ShoppingListState = initialState, action: ShoppingListActions.ShoppingListActions) {
+export function shoppingListReducer(state: State = initialState, action: ShoppingListActions.ShoppingListActions) {
   switch(action.type) {
     case ShoppingListActions.ADD_INGREDIENT: // By convention, action types are written uppercase
       return {

@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
-import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
+import * as fromApp from './store/app.reducer';
 
 /* To lazy load the recipes module:
  * 1. Remove all imports/references of the RecipesModule from the AppModule
@@ -45,7 +45,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     HttpClientModule,
     // Declaration of the Store with its structure (so far only the shopping list)
-    StoreModule.forRoot({ shoppingList: shoppingListReducer }),
+    StoreModule.forRoot(fromApp.appReducer),
     SharedModule,
     CoreModule,
   ],
