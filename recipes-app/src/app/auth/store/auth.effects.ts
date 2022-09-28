@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
-import { catchError, map, of, switchMap, tap } from 'rxjs';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import * as AuthActions from './auth.actions';
 
@@ -22,39 +22,37 @@ export class AuthEffects {
 
   constructor(private actions$: Actions, private http: HttpClient) {}
 
-  @Effect()
-  authLogin = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_START),
-    switchMap((authData: AuthActions.LoginStart) => {
-      let apiFunction = 'signInWithPassword';
-      return this.http
-        .post<AuthResponseData>(
-          this.urlPrefix + apiFunction + this.urlPostfix,
-          {
-            email: authData.payload.email,
-            password: authData.payload.password,
-            returnSecureToken: true,
-          }
-        )
-        .pipe(
-          map((resData) => {
-            const expirationTime = new Date(
-              new Date().getTime() + +resData.expiresIn * 1000
-            );
-            return of(
-              new AuthActions.Login({
+  authLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.LOGIN_START),
+      switchMap((authData: AuthActions.LoginStart) => {
+        let apiFunction = 'signInWithPassword';
+        return this.http
+          .post<AuthResponseData>(
+            this.urlPrefix + apiFunction + this.urlPostfix,
+            {
+              email: authData.payload.email,
+              password: authData.payload.password,
+              returnSecureToken: true,
+            }
+          )
+          .pipe(
+            map((resData) => {
+              const expirationTime = new Date(
+                new Date().getTime() + +resData.expiresIn * 1000
+              );
+              return new AuthActions.Login({
                 email: resData.email,
                 userId: resData.localId,
                 token: resData.idToken,
                 expirationDate: expirationTime,
-              })
-            );
-          }),
-          catchError((error) => {
-            return of();
-          })
-        );
-    })
+              });
+            }),
+            catchError((error: HttpErrorResponse) =>
+              of(new AuthActions.LoginFail(error.error.errorMessage))
+            )
+          );
+      })
+    )
   );
-
 }
