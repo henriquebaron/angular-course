@@ -105,7 +105,7 @@ export class AuthEffects {
   authRedirect$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthActions.AUTHENTICATE_SUCCESS, AuthActions.LOGOUT),
+        ofType(AuthActions.AUTHENTICATE_SUCCESS),
         tap(() => {
           this.router.navigate(['/']);
         })
@@ -180,6 +180,12 @@ export class AuthEffects {
         tap(() => {
           this.service.clearLogoutTimer();
           localStorage.removeItem('userData');
+          /* The redirection has been moved here to explicitly redirect to '/auth'.
+           * Redirecting after logout in the Redirect effect caused a race contition
+           * in which the state of the application still did not have the user with
+           * the 'null' value when it was tested in the AuthGuard. That caused the
+           * app to allow the user to remain in the 'recipes' page after logout. */
+          this.router.navigate(['/auth']);
         })
       ),
     { dispatch: false }
