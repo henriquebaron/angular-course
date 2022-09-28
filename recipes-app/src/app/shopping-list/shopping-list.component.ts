@@ -1,33 +1,32 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/shared/ingredient.model';
 import { ShoppingListService } from './shopping-list.service';
 
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
-  styleUrls: ['./shopping-list.component.css']
+  styleUrls: ['./shopping-list.component.css'],
 })
-export class ShoppingListComponent implements OnInit, OnDestroy {
-  ingredients: Ingredient[] = [];
-  private ingredientChangeSubscription: Subscription;
+export class ShoppingListComponent implements OnInit {
+  ingredients!: Observable<{ ingredients: Ingredient[] }>;
 
-  constructor(private shoppingListService: ShoppingListService) { 
-    this.ingredientChangeSubscription = this.shoppingListService.ingredientsChanged.subscribe(
-      (ingredients: Ingredient[]) => { this.ingredients = ingredients }
-    );
-  }
+  /* With the the store injected in the constructor, the "data model" part of the
+   * ShoppingListService will be replaced by the store. "ingredients" became an
+   * Observable that returns an array, and the manipulation of an Ingredient array
+   * in this component was removed.  */
+  constructor(
+    private shoppingListService: ShoppingListService,
+    private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>
+  ) { }
 
   ngOnInit(): void {
-    this.ingredients = this.shoppingListService.getIngredients();
+    this.ingredients = this.store.select('shoppingList');
   }
 
   onEditItem(index: number): void {
     this.shoppingListService.startedEditing.next(index);
-  }
-
-  ngOnDestroy(): void {
-    this.ingredientChangeSubscription.unsubscribe();
   }
 
 }
