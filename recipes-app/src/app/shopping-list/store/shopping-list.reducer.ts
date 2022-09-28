@@ -38,19 +38,20 @@ export function shoppingListReducer(state: ShoppingListState = initialState, act
         ingredients: [...state.ingredients, ...(action.payload as Ingredient[])]
       };
     case ShoppingListActions.UPDATE_INGREDIENT:
-      const thisAction = action as ShoppingListActions.UpdateIngredient; // Cast the action to have "index" and "Ingredient"
-      const ingredient = state.ingredients[thisAction.payload.index] // Fetches the ingredient to be updated
+      const ingredient = state.ingredients[state.editedIngredientIndex] // Fetches the ingredient to be updated
       const updatedIngredient = { // Immutable pattern: Creates a copy of the ingredient to change...
         ...ingredient,            // ...spreading the current properties
-        ...thisAction.payload.ingredient // ...and then spreading the properties of the new object
+        ...action.payload // ...and then spreading the properties of the new object
       };
       // Immutable pattern: don't change the ingredients array, but rather create a copy from the object
       const updatedIngredients = [...state.ingredients];
       // On the newly copied array, change the element to the new ingredient (also a copied object)
-      updatedIngredients[thisAction.payload.index] = updatedIngredient;
+      updatedIngredients[state.editedIngredientIndex] = updatedIngredient;
       return {
         ...state,
-        ingredients: updatedIngredients
+        ingredients: updatedIngredients,
+        editedIngredientIndex: -1,
+        editedIngredient: null,
       };
     case ShoppingListActions.DELETE_INGREDIENT:
       return {
@@ -59,8 +60,22 @@ export function shoppingListReducer(state: ShoppingListState = initialState, act
         // The arrow function inside will include in the returned array the elements for which the
         // expression returns "true".
         ingredients: state.ingredients.filter((ing, index) => {
-          return index !== action.payload;
-        })
+          return index !== state.editedIngredientIndex;
+        }),
+        editedIngredientIndex: -1,
+        editedIngredient: null,
+      };
+    case ShoppingListActions.START_EDIT:
+      return {
+        ...state,
+        editedIngredientIndex: action.payload,
+        editedIngredient: { ...state.ingredients[action.payload] }
+      };
+    case ShoppingListActions.STOP_EDIT:
+      return {
+        ...state,
+        editedIngredientIndex: -1,
+        editedIngredient: null,
       };
     default:
       return state;
