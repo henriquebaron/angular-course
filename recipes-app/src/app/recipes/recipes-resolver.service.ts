@@ -8,7 +8,6 @@ import { map, Observable, of, switchMap, take } from 'rxjs';
 import * as fromApp from '../store/app.reducer';
 import * as RecipeActions from './store/recipe.actions';
 import { Recipe } from './recipe.model';
-import { RecipeService } from './recipe.service';
 import { Store } from '@ngrx/store';
 import { Actions, ofType } from '@ngrx/effects';
 
@@ -17,7 +16,6 @@ import { Actions, ofType } from '@ngrx/effects';
 })
 export class RecipesResolverService implements Resolve<Recipe[]> {
   constructor(
-    private recipeService: RecipeService,
     private store: Store<fromApp.AppState>,
     private actions$: Actions
   ) {}
