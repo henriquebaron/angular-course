@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { User } from '../user.model';
 import * as AuthActions from './auth.actions';
 
 export interface AuthResponseData {
@@ -16,13 +17,19 @@ export interface AuthResponseData {
 }
 
 function handleAuthentication(resData: AuthResponseData) {
+  const email = resData.email;
+  const localId = resData.localId;
+  const token = resData.idToken;
+
   const expirationTime = new Date(
     new Date().getTime() + +resData.expiresIn * 1000
   );
+  const user = new User(email, localId, token, expirationTime);
+  localStorage.setItem('userData', JSON.stringify(user));
   return new AuthActions.AuthenticateSuccess({
-    email: resData.email,
-    userId: resData.localId,
-    token: resData.idToken,
+    email: email,
+    userId: localId,
+    token: token,
     expirationDate: expirationTime,
   });
 }
@@ -71,9 +78,7 @@ export class AuthEffects {
             }
           )
           .pipe(
-            map((resData) => {
-              return handleAuthentication(resData);
-            }),
+            map((resData) => handleAuthentication(resData)),
             /* In contrast to the "handleError" method of the AuthService,
              * the "catchError" should never throw an error (with the "throw"
              * function). This would break the observable and stop it from running.
@@ -92,7 +97,7 @@ export class AuthEffects {
 
   // This effect does not yield any action. For that reason, a configuration object with
   // "dispatch" set to "false" has to be passed.
-  authSuccess$ = createEffect(
+  authRedirect$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(AuthActions.AUTHENTICATE_SUCCESS, AuthActions.LOGOUT),
@@ -118,17 +123,7 @@ export class AuthEffects {
             }
           )
           .pipe(
-            map((resData) => {
-              const expirationTime = new Date(
-                new Date().getTime() + +resData.expiresIn * 1000
-              );
-              return new AuthActions.AuthenticateSuccess({
-                email: resData.email,
-                userId: resData.localId,
-                token: resData.idToken,
-                expirationDate: expirationTime,
-              });
-            }),
+            map((resData) => handleAuthentication(resData)),
             catchError((response: HttpErrorResponse) => {
               let errorMessage = handleErrorResponse(response);
               return of(new AuthActions.AuthenticateFail(errorMessage));
@@ -137,4 +132,48 @@ export class AuthEffects {
       })
     )
   );
+
+  autoLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.AUTO_LOGIN),
+      map(() => {
+        const userData: {
+          email: string;
+          id: string;
+          _token: string;
+          _tokenExpirationDate: string;
+        } = JSON.parse(localStorage.getItem('userData') ?? '{}'); // Null coalescing operator, since I'm working in 'strict' mode
+        if (!userData) return { type: 'NOTHING'};
+        const loadedUser = new User(
+          userData.email,
+          userData.id,
+          userData._token,
+          new Date(userData._tokenExpirationDate)
+        );
+
+        if (loadedUser.token) {
+          return new AuthActions.AuthenticateSuccess({
+            email: loadedUser.email,
+            userId: loadedUser.id,
+            token: loadedUser.token,
+            expirationDate: new Date(userData._tokenExpirationDate),
+          });
+          // const expirationTime = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+          // this.autoLogout(expirationTime);
+        } else return { type: 'NOTHING'};
+      })
+    )
+  );
+
+  authLogout$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.LOGOUT),
+        tap(() => {
+          localStorage.removeItem('userData');
+        })
+      ),
+    { dispatch: false }
+  );
+
 }
