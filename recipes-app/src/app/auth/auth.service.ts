@@ -29,7 +29,7 @@ export class AuthService {
 
   /* The BehaviorSubject works pretty much like the regular Subject, but the subscribers can access the value
    * of the last Subject update, even if they subscribed after the last update was triggered. */
-  user = new BehaviorSubject<User | null>(null);
+  // user = new BehaviorSubject<User | null>(null);
 
   private tokenExpirationTimer: any;
 
