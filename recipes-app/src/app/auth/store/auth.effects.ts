@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import * as AuthActions from './auth.actions';
 
@@ -20,7 +21,11 @@ export class AuthEffects {
     'https://identitytoolkit.googleapis.com/v1/accounts:';
   private urlPostfix: string = '?key=' + environment.firebaseAPIkey;
 
-  constructor(private actions$: Actions, private http: HttpClient) {}
+  constructor(
+    private actions$: Actions,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   authLogin$ = createEffect(() =>
     this.actions$.pipe(
@@ -54,5 +59,18 @@ export class AuthEffects {
           );
       })
     )
+  );
+
+  // This effect does not yield any action. For that reason, a configuration object with
+  // "dispatch" set to "false" has to be passed.
+  authSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.LOGIN),
+        tap(() => {
+          this.router.navigate(['/']);
+        })
+      ),
+    { dispatch: false }
   );
 }
