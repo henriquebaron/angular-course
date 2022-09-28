@@ -1,11 +1,23 @@
 import { Ingredient } from "../../shared/ingredient.model";
-import * as ShoppingListActions from "./shoppint-list.actions";
+import * as ShoppingListActions from "./shopping-list.actions";
 
-const initialState = {
+export interface ShoppingListState {
+  ingredients: Ingredient[],
+  editedIngredient: Ingredient,
+  editedIngredientIndex: number
+}
+
+export interface AppState {
+  shoppingList: ShoppingListState;
+}
+
+const initialState: ShoppingListState = {
   ingredients: [
     new Ingredient('Apples', 5),
     new Ingredient('Tomatoes', 10)
   ],
+  editedIngredient: null,
+  editedIngredientIndex: -1
 };
 
 /* In the Redux pattern, the state is immutable (read-only), and changes are made
@@ -13,7 +25,7 @@ const initialState = {
  * changing the inputs*.
  * That is why a new object is returned, and the spread operator is used in the returned
  * object to include a copy of the previous state. */
-export function shoppingListReducer(state: { ingredients: Ingredient[] } = initialState, action: ShoppingListActions.ShoppingListActions) {
+export function shoppingListReducer(state: ShoppingListState = initialState, action: ShoppingListActions.ShoppingListActions) {
   switch(action.type) {
     case ShoppingListActions.ADD_INGREDIENT: // By convention, action types are written uppercase
       return {
