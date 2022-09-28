@@ -14,6 +14,7 @@ import { CoreModule } from './core.module';
 import * as fromApp from './store/app.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth/store/auth.effects';
+import { RecipeEffects } from './recipes/store/recipe.effects';
 
 /* To lazy load the recipes module:
  * 1. Remove all imports/references of the RecipesModule from the AppModule
@@ -51,7 +52,7 @@ const routes: Routes = [
     HttpClientModule,
     // Declaration of the Store with its structure (so far only the shopping list)
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     /* This "router extension" dispatches some actions automatically when navigating routes.
      * It is not necessary in this project, but can be useful in other applications. */
