@@ -13,12 +13,14 @@ const initialState = {
  * changing the inputs*.
  * That is why a new object is returned, and the spread operator is used in the returned
  * object to include a copy of the previous state. */
-export function shoppingListReducer(state = initialState, action: ShoppingListActions.AddIngredient) {
+export function shoppingListReducer(state: { ingredients: (Ingredient | undefined)[] } = initialState, action: ShoppingListActions.AddIngredient) {
   switch(action.type) {
     case ShoppingListActions.ADD_INGREDIENT: // By convention, action types are written uppercase
       return {
         ...state,
         ingredients: [...state.ingredients, action.payload]
       }
+    default:
+      return state;
   }
 }
