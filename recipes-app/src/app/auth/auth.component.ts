@@ -28,12 +28,13 @@ export class AuthComponent implements OnInit, OnDestroy {
   @ViewChild(PlaceholderDirective) alertHost!: PlaceholderDirective;
 
   private closeSub: Subscription = new Subscription();
+  private storeSub: Subscription = new Subscription();
 
   // constructor(private auth: AuthService, private router: Router, private componentFactoryResolver: ComponentFactoryResolver) {}
   constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit(): void {
-    this.store.select('auth').subscribe((authState) => {
+    this.storeSub = this.store.select('auth').subscribe((authState) => {
       this.isLoading = authState.loading;
       this.error = authState.authError;
       if (this.error) this.showErrorAlert(this.error);
@@ -65,7 +66,11 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   onHandleError() {
-    this.error = undefined;
+    /* Setting the error (which belongs to the state) here is a duplicate
+     * state management, which is not a good practice. Once using the Store,
+     * all the state management should happen in the reducer. */
+    // this.error = undefined;
+    this.store.dispatch(new AuthActions.ClearError());
   }
 
   private showErrorAlert(message: string) {
@@ -85,5 +90,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (this.closeSub) {
       this.closeSub.unsubscribe();
     }
+    this.storeSub?.unsubscribe();
   }
 }
