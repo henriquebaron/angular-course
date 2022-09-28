@@ -53,9 +53,29 @@ export class AuthEffects {
                 expirationDate: expirationTime,
               });
             }),
-            catchError((error: HttpErrorResponse) =>
-              of(new AuthActions.LoginFail(error.error.errorMessage))
-            )
+            /* In contrast to the "handleError" method of the AuthService,
+             * the "catchError" should never throw an error (with the "throw"
+             * function). This would break the observable and stop it from running.
+             * In contrast to observables implemented in regular services, the
+             * observables of NgRx are ongoing: they life during the entire lifecycle
+             * of the application. If an error is thrown, it will be broken and won't
+             * be respawned. */
+            catchError((errorResponse: HttpErrorResponse) => {
+              let errorMessage = 'An unknown error occurred!';
+              if (errorResponse.error && errorResponse.error.error) {
+                switch (errorResponse.error.error.message) {
+                  case 'EMAIL_EXISTS':
+                    errorMessage = 'This e-mail exists already.';
+                    break;
+                  case 'EMAIL_NOT_FOUND':
+                    errorMessage = 'This e-mail does not exist.';
+                    break;
+                  case 'INVALID_PASSWORD':
+                    errorMessage = 'The password is incorrect.';
+                }
+              }
+              return of(new AuthActions.LoginFail(errorMessage));
+            })
           );
       })
     )
