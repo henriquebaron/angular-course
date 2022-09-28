@@ -38,7 +38,12 @@ export class AuthComponent implements OnInit, OnDestroy {
     private store: Store<fromApp.AppState>
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.store.select('auth').subscribe(authState => {
+      this.isLoading = authState.loading;
+      this.error = authState.authError;
+    })
+  }
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -58,19 +63,20 @@ export class AuthComponent implements OnInit, OnDestroy {
       } else {
         authObservable = this.auth.signUp(email, password);
       }
-      authObservable.subscribe(
-        (resData) => {
-          console.log(resData);
-          this.isLoading = false;
-          this.router.navigate(['/recipes']);
-        },
-        (errorMessage) => {
-          console.log(errorMessage);
-          this.error = errorMessage;
-          this.showErrorAlert(errorMessage);
-          this.isLoading = false;
-        }
-      );
+
+      // authObservable.subscribe(
+      //   (resData) => {
+      //     console.log(resData);
+      //     this.isLoading = false;
+      //     this.router.navigate(['/recipes']);
+      //   },
+      //   (errorMessage) => {
+      //     console.log(errorMessage);
+      //     this.error = errorMessage;
+      //     this.showErrorAlert(errorMessage);
+      //     this.isLoading = false;
+      //   }
+      // );
       form.reset();
     }
   }
