@@ -15,6 +15,35 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
+function handleAuthentication(resData: AuthResponseData) {
+  const expirationTime = new Date(
+    new Date().getTime() + +resData.expiresIn * 1000
+  );
+  return new AuthActions.AuthenticateSuccess({
+    email: resData.email,
+    userId: resData.localId,
+    token: resData.idToken,
+    expirationDate: expirationTime,
+  });
+}
+
+function handleErrorResponse(errorResponse: HttpErrorResponse) {
+  let errorMessage = 'An unknown error occurred!';
+  if (errorResponse.error && errorResponse.error.error) {
+    switch (errorResponse.error.error.message) {
+      case 'EMAIL_EXISTS':
+        errorMessage = 'This e-mail exists already.';
+        break;
+      case 'EMAIL_NOT_FOUND':
+        errorMessage = 'This e-mail does not exist.';
+        break;
+      case 'INVALID_PASSWORD':
+        errorMessage = 'The password is incorrect.';
+    }
+  }
+  return errorMessage;
+}
+
 @Injectable()
 export class AuthEffects {
   private urlPrefix: string =
@@ -43,15 +72,7 @@ export class AuthEffects {
           )
           .pipe(
             map((resData) => {
-              const expirationTime = new Date(
-                new Date().getTime() + +resData.expiresIn * 1000
-              );
-              return new AuthActions.AuthenticateSuccess({
-                email: resData.email,
-                userId: resData.localId,
-                token: resData.idToken,
-                expirationDate: expirationTime,
-              });
+              return handleAuthentication(resData);
             }),
             /* In contrast to the "handleError" method of the AuthService,
              * the "catchError" should never throw an error (with the "throw"
@@ -60,20 +81,8 @@ export class AuthEffects {
              * observables of NgRx are ongoing: they life during the entire lifecycle
              * of the application. If an error is thrown, it will be broken and won't
              * be respawned. */
-            catchError((errorResponse: HttpErrorResponse) => {
-              let errorMessage = 'An unknown error occurred!';
-              if (errorResponse.error && errorResponse.error.error) {
-                switch (errorResponse.error.error.message) {
-                  case 'EMAIL_EXISTS':
-                    errorMessage = 'This e-mail exists already.';
-                    break;
-                  case 'EMAIL_NOT_FOUND':
-                    errorMessage = 'This e-mail does not exist.';
-                    break;
-                  case 'INVALID_PASSWORD':
-                    errorMessage = 'The password is incorrect.';
-                }
-              }
+            catchError((response: HttpErrorResponse) => {
+              let errorMessage = handleErrorResponse(response);
               return of(new AuthActions.AuthenticateFail(errorMessage));
             })
           );
@@ -92,5 +101,40 @@ export class AuthEffects {
         })
       ),
     { dispatch: false }
+  );
+
+  authSignup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.SIGNUP_START),
+      switchMap((signupAction: AuthActions.SignupStart) => {
+        let apiFunction = 'signUp';
+        return this.http
+          .post<AuthResponseData>(
+            this.urlPrefix + apiFunction + this.urlPostfix,
+            {
+              email: signupAction.payload.email,
+              password: signupAction.payload.password,
+              returnSecureToken: true,
+            }
+          )
+          .pipe(
+            map((resData) => {
+              const expirationTime = new Date(
+                new Date().getTime() + +resData.expiresIn * 1000
+              );
+              return new AuthActions.AuthenticateSuccess({
+                email: resData.email,
+                userId: resData.localId,
+                token: resData.idToken,
+                expirationDate: expirationTime,
+              });
+            }),
+            catchError((response: HttpErrorResponse) => {
+              let errorMessage = handleErrorResponse(response);
+              return of(new AuthActions.AuthenticateFail(errorMessage));
+            })
+          );
+      })
+    )
   );
 }
