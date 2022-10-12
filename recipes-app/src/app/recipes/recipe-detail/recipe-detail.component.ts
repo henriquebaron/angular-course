@@ -31,8 +31,8 @@ export class RecipeDetailComponent implements OnInit {
           this.id = +params['id'];
           return this.store.select('recipes');
         }),
-        map((recipesState) => {
-          return recipesState.recipes.find(
+        map((recipeState) => {
+          return recipeState.recipes.find(
             (recipe, index) => index === this.id
           );
         })

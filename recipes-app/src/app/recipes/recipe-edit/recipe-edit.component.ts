@@ -48,8 +48,8 @@ export class RecipeEditComponent implements OnInit {
       this.store
         .select('recipes')
         .pipe(
-          map((recipesState) => {
-            return recipesState.recipes.find(
+          map((recipeState) => {
+            return recipeState.recipes.find(
               (recipe, index) => index === this.id
             );
           })
