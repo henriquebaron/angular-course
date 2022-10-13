@@ -47,8 +47,10 @@ const routes: Routes = [
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
   imports: [
-    BrowserModule,
-    RouterModule.forRoot(routes),
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    RouterModule.forRoot(routes, {
+    initialNavigation: 'enabledBlocking'
+}),
     HttpClientModule,
     // Declaration of the Store with its structure (so far only the shopping list)
     StoreModule.forRoot(fromApp.appReducer),
