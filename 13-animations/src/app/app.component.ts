@@ -1,4 +1,4 @@
-import { state, style, trigger } from "@angular/animations";
+import { animate, state, style, transition, trigger } from "@angular/animations";
 import { Component } from "@angular/core";
 
 @Component({
@@ -20,6 +20,8 @@ import { Component } from "@angular/core";
           transform: "translateX(100px)",
         })
       ),
+      transition('normal => highlighted', animate(300)),
+      transition('highlighted => normal', animate(800)),
     ]),
   ],
 })
