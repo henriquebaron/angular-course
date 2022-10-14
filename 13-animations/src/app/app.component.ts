@@ -75,6 +75,37 @@ import { Component } from "@angular/core";
         animate(500),
       ]),
     ]),
+    trigger("list1", [
+      state(
+        "in",
+        style({
+          opacity: 1,
+          transform: "translateX(0)",
+        })
+      ),
+      /* The "void" state is the undefined state, in which the object still does not exist. This state name
+       * is a reserved keyword */
+      transition("void => *", [
+        style({
+          opacity: 0,
+          transform: "translateX(-100px)",
+        }),
+        animate(300),
+      ]),
+      transition("* => void", [
+        style({
+          opacity: 1,
+          transform: "translateX(0)",
+        }),
+        animate(
+          300,
+          style({
+            opacity: 0,
+            transform: "translateX(100px)",
+          })
+        ),
+      ]),
+    ]),
   ],
 })
 export class AppComponent {
@@ -84,6 +115,10 @@ export class AppComponent {
 
   onAdd(item) {
     this.list.push(item);
+  }
+
+  onDelete(item: string) {
+    this.list = this.list.filter((value) => value !== item);
   }
 
   onAnimate() {
