@@ -9,11 +9,12 @@ import { Post } from './post.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  posts: Post[] = [];
+  title = 'service-workers';
+  posts: Post[] = []
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.http
       .get<Post[]>('https://jsonplaceholder.typicode.com/posts')
       .subscribe(fetchedPosts => (this.posts = fetchedPosts));

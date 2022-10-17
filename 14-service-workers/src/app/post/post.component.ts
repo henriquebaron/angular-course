@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./post.component.css']
 })
 export class PostComponent {
-  @Input() title: string;
-  @Input() content: string;
+  @Input() title: string = '';
+  @Input() content: string = '';
 }
