@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { DataService } from '../shared/data.service';
 
 import { UserComponent } from './user.component';
@@ -75,6 +75,18 @@ describe('UserComponent', () => {
     fixture.whenStable().then(() => {
       expect(app.data).toBe('Data');
     });
+  }));
+
+  // Another option test async tasks is to use fakeAsync
+  it('should fetch data successfully if called asynchronously', fakeAsync(() => {
+    let fixture = TestBed.createComponent(UserComponent);
+    let app = fixture.debugElement.componentInstance;
+    let dataService = fixture.debugElement.injector.get(DataService);
+    let spy = spyOn(dataService, 'getDetails')
+      .and.returnValue(Promise.resolve('Data'));
+    fixture.detectChanges();
+    tick();
+    expect(app.data).toBe('Data');
   }));
 
 });
