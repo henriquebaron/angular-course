@@ -1,1 +1,7 @@
+<!-- Without any special configuration, the service worker will display the hard coded content
+of the page. This means: If the user goes offline, only the title below will be shown, but no
+message of "no internet connection" will be displayed.
+Adding the link to the font in the ngsw configuration though, allows for the font to be preloaded
+for the title. -->
+<h1>My Posts</h1>
 <app-post *ngFor="let post of posts" [content]="post.body" [title]="post.title"></app-post>
