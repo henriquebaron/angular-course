@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { DataService } from '../shared/data.service';
 
 import { UserComponent } from './user.component';
 import { UserService } from './user.service';
@@ -41,7 +42,7 @@ describe('UserComponent', () => {
     fixture.detectChanges();
     let compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('p').textContent).toContain(app.user.name);
-  })
+  });
 
   it('should not display the user name if the user is not logged in', () => {
     let fixture = TestBed.createComponent(UserComponent);
@@ -49,6 +50,31 @@ describe('UserComponent', () => {
     fixture.detectChanges();
     let compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('p').textContent).not.toContain(app.user.name);
-  })
+  });
+
+  // This test does not make sense in practical life but just demonstrates
+  // testing for an asynchronous function.
+  it('should not fetch data successfully if not called asynchronously', () => {
+    let fixture = TestBed.createComponent(UserComponent);
+    let app = fixture.debugElement.componentInstance;
+    let dataService = fixture.debugElement.injector.get(DataService);
+    let spy = spyOn(dataService, 'getDetails')
+      .and.returnValue(Promise.resolve('Data'));
+    fixture.detectChanges();
+    expect(app.data).toBe(undefined);
+  });
+
+  // This uses waitForAsync to properly test asynchronous tasks
+  it('should fetch data successfully if called asynchronously', waitForAsync(() => {
+    let fixture = TestBed.createComponent(UserComponent);
+    let app = fixture.debugElement.componentInstance;
+    let dataService = fixture.debugElement.injector.get(DataService);
+    let spy = spyOn(dataService, 'getDetails')
+      .and.returnValue(Promise.resolve('Data'));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(app.data).toBe('Data');
+    });
+  }));
 
 });
