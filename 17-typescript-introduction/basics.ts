@@ -49,3 +49,20 @@ let anotherPerson: Person = {
     name: 'Henrique',
     age: 29
 };
+
+
+// TypeScript supports also generics in a similar way to C#
+/* Why to use generics instead of 'any' type in the inputs? Because the function returned type would also be
+ * of type 'any'. That throws away all the static typing advantages of TypeScript. */
+
+function insertAtBeginning<T>(array: T[], value: T) {
+  const newArray = [value, ...array];
+  return newArray;
+}
+
+const numberArray = [1, 2, 3];
+const updatedNumberArray = insertAtBeginning(numberArray, -1); // The type <T> is not input, but TypeScript infers the type
+// const updatedNumberArray = insertAtBeginning<number>(numberArray, -1); // This syntax is equivalent (and redundant in this case)
+
+const stringArray = ['Apples', 'Bananas', 'Carrots'];
+const updatedStringArray = insertAtBeginning(stringArray, 'Zucchinis');
